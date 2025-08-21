@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Scholarship Application</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 80px auto 20px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 { text-align: center; color: #004080; }
+    h2 { margin-top: 20px; color: #333; }
+    label { font-weight: bold; display: block; margin-top: 10px; }
+    input, textarea, select {
+      width: 100%; padding: 10px; margin-top: 5px;
+      border: 1px solid #ccc; border-radius: 5px;
+    }
+    textarea { resize: vertical; min-height: 80px; }
+    button {
+      background: #004080; color: #fff; padding: 12px 20px;
+      border: none; border-radius: 5px; cursor: pointer;
+      margin-top: 20px; width: 100%;
+    }
+    button:hover { background: #003060; }
+    .countdown {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: red; color: white;
+      font-size: 20px; font-weight: bold;
+      text-align: center; padding: 10px;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+  <!-- Countdown always visible -->
+  <div id="countdown" class="countdown"></div>
+
+  <div class="container">
+    <h1>Student Scholarship Application</h1>
+    <form id="scholarshipForm">
+      <h2>1. Personal Information</h2>
+      <label>Full Name:</label><input type="text" required>
+      <label>Email Address:</label><input type="email" required>
+      <label>Phone Number:</label><input type="tel" required>
+
+      <h2>2. Academic Information</h2>
+      <label>Institution Name:</label><input type="text" required>
+      <label>Current Level of Study:</label>
+      <select required>
+        <option value="">Select...</option>
+        <option>High School</option>
+        <option>Undergraduate</option>
+        <option>Postgraduate</option>
+      </select>
+      <label>Field of Study:</label><input type="text" required>
+
+      <h2>3. Motivation Statement</h2>
+      <label>Why are you applying for this scholarship?</label><textarea required></textarea>
+
+      <h2>4. Extracurricular Activities</h2>
+      <label>List any extracurricular or volunteer activities:</label><textarea></textarea>
+
+      <h2>5. Supporting Documents</h2>
+      <label>Upload Transcript:</label><input type="file">
+      <label>Upload Recommendation Letter:</label><input type="file">
+
+      <h2>6. Review & Submit</h2>
+      <p>Please review your details carefully before submitting.</p>
+
+      <h2>7. Declaration & Consent</h2>
+      <label><input type="checkbox" required> I certify all information is accurate.</label>
+      <p>By submitting this form, you agree to the scholarship terms.</p>
+
+      <h2>8. Account Information</h2>
+      <label>Please provide your preferred account/payment details (scholarship, bursary, or pocket):</label>
+      <textarea name="accountInfo" placeholder="Write your details here..." required></textarea>
+
+      <button type="submit">Submit Application</button>
+    </form>
+  </div>
+
+  <script>
+    window.onload = function() {
+      const countdownEl = document.getElementById("countdown");
+      let endTime = localStorage.getItem("deadlineEnd");
+
+      if (!endTime) {
+        endTime = new Date().getTime() + (30 * 24 * 60 * 60 * 1000);
+        localStorage.setItem("deadlineEnd", endTime);
+      } else {
+        endTime = parseInt(endTime);
+      }
+
+      function updateCountdown() {
+        const now = new Date().getTime();
+        let distance = endTime - now;
+
+        if (distance <= 0) {
+          endTime = new Date().getTime() + (30 * 24 * 60 * 60 * 1000);
+          localStorage.setItem("deadlineEnd", endTime);
+          distance = endTime - now;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        countdownEl.innerHTML = `⏳ Deadline: <strong>${days}d ${hours}h ${minutes}m ${seconds}s</strong>`;
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+
+      // WhatsApp redirect on submit
+      document.getElementById("scholarshipForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        window.location.href = "https://wa.me/254763019802?text=I%20have%20submitted%20my%20scholarship%20application.";
+      });
+    }
+  </script>
+</body>
+</html>
